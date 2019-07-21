@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
@@ -56,7 +55,7 @@ class FeedforwardNeuralNetModel(nn.Module):
 		# Feed Forward
 		x = self.input(x)
 		for layer in self.hidden:
-			x = torch.nn.functional.relu(layer(x))
+			x = torch.nn.functional.linear(layer(x))
 		output = torch.nn.functional.softmax(self.output(x), dim = 1)
 		return output
 
