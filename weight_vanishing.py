@@ -15,7 +15,7 @@ num_classes = 10
 num_epochs = 5
 batch_size = 100
 learning_rate = 0.001
-depth = 10
+depth = 100
 
 train_dataset = torchvision.datasets.MNIST(root='./data', 
                                            train=True, 
@@ -55,7 +55,8 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         out = self.input(x)
         for layer in self.hidden:
-            out = torch.tanh(layer(out))
+            # out = torch.tanh(layer(out))
+            out = layer(out)
         out = self.output(out)
         return out
 
@@ -165,13 +166,13 @@ print ("Len of mean_list = ",len(mean_list) ,"\nLen of mean_list_without_output 
 
 
 x_axis = list(range(depth+1))
-plt.plot(x_axis,mean_list)
+plt.plot(x_axis,mean_list,label='mean')
+# plt.yscale('log')
+# plt.savefig('100_depth_weight_mean_without_xavier_linear_activation')
+plt.plot(x_axis,var_list,label='variance')
+plt.legend(loc='upper left')
 plt.yscale('log')
-plt.savefig('100_depth_weight_mean_xavier')
-
-plt.plot(x_axis,var_list)
-plt.yscale('log')
-plt.savefig('100_depth_weight_variance_xavier')
+plt.savefig('100_depth_weight_mean_variance_with_xavier_linear_activation')
 
 
 

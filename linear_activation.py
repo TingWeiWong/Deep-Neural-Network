@@ -4,7 +4,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 
 '''
-STEP 1: LOADING DATASET
+STEP 1: LOADING DATASET test
 '''
 
 train_dataset = dsets.CIFAR10(root='./data', 
