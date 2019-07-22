@@ -104,6 +104,11 @@ venv.bak/
 .mypy_cache/
 
 
+<<<<<<< HEAD
 #data file 
 /data
 
+=======
+# data folder
+/data
+>>>>>>> 50697a3a16ccc17d67d7d8807775e3019586acfd
