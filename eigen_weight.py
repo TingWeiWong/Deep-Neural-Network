@@ -93,6 +93,8 @@ for epoch in range(num_epochs):
 
     grads_gradient = {}
     grads_list = []
+    weight_list = []
+    weight_dict = []
 #         for param in model.named_parameters():
 #             print (param[0])
 #         for name, para in (model.named_parameters()):
@@ -105,11 +107,14 @@ for epoch in range(num_epochs):
         print ("Mean of grad = ",param.grad.mean())
 
         grads_list.append(param.grad)
+        weight_list.append(param.data)
 
         # weight_sum = torch.sum(model.hidden.weight.data)
         # print ("Weight sum = ",weight_sum)
 grads_list = grads_list[1::2]
+weight_list = weight_list[1::2]
 print ("Len of grads_list = ", len(grads_list))
+print ("Len of weight list = ", len(weight_list))
 
 
 
