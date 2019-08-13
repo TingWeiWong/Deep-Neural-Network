@@ -9,20 +9,20 @@ import matplotlib.pyplot as plt
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters 
-input_size = 784
-hidden_size = 100
+input_size = 3072
+hidden_size = 500
 num_classes = 10
 num_epochs = 1
 batch_size = 100
 learning_rate = 0.1
-depth = 10
+depth = 5
 
-train_dataset = torchvision.datasets.MNIST(root='./data', 
+train_dataset = torchvision.datasets.CIFAR10(root='./data', 
                                            train=True, 
                                            transform=transforms.ToTensor(),  
                                            download=True)
 
-test_dataset = torchvision.datasets.MNIST(root='./data', 
+test_dataset = torchvision.datasets.CIFAR10(root='./data', 
                                           train=False, 
                                           transform=transforms.ToTensor())
 
@@ -55,8 +55,8 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         out = self.input(x)
         for layer in self.hidden:
-            out = torch.tanh(layer(out))
-            # out = torch.relu(layer(out))
+            # out = torch.tanh(layer(out))
+            out = torch.relu(layer(out))
             # out = layer(out)
         out = self.output(out)
         return out
@@ -80,7 +80,7 @@ total_step = len(train_loader)
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.reshape(-1, 32*32*3).to(device)
         labels = labels.to(device)
         
         # Forward pass
@@ -101,11 +101,11 @@ for epoch in range(num_epochs):
 #         for name, para in (model.named_parameters()):
 #             grads_gradient[name] = para.grad
     for name,param in model.named_parameters():
-        # print ("Gradient in ",epoch, " epoch = ",param.grad)
-        # # print ("Name in ",epoch, " epoch = ",param.name)
-        # print ("Data in ",epoch, " epoch = ",param.data)
-        # print ("Mean of weight = ",param.data.mean())
-        # print ("Mean of grad = ",param.grad.mean())
+        print ("Gradient in ",epoch, " epoch = ",param.grad)
+        # print ("Name in ",epoch, " epoch = ",param.name)
+        print ("Data in ",epoch, " epoch = ",param.data)
+        print ("Mean of weight = ",param.data.mean())
+        print ("Mean of grad = ",param.grad.mean())
 
         grads_list.append(param.grad)
         weight_list.append(param.data)
@@ -133,7 +133,7 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.reshape(-1, 32*32*3).to(device)
         labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
@@ -188,7 +188,7 @@ plt.plot(x_axis,mean_list,label='mean')
 plt.plot(x_axis,var_list,label='variance')
 plt.legend(loc='upper left')
 plt.yscale('log')
-plt.savefig('MNIST_%d_depth_weight_mean_variance_with_xavier_linear_activation' % depth)
+plt.savefig('CIFAR10_%d_depth_weight_mean_variance_with_xavier_linear_activation' % depth)
 
 
 
