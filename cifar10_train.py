@@ -4,6 +4,7 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torchvision.datasets as dsets
 
+
 '''
 STEP 1: LOADING DATASET
 '''
