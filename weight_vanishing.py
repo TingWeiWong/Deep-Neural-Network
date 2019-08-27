@@ -15,7 +15,7 @@ num_classes = 10
 num_epochs = 5
 batch_size = 100
 learning_rate = 0.001
-depth = 100
+depth = 5
 
 train_dataset = torchvision.datasets.MNIST(root='./data', 
                                            train=True, 
@@ -55,8 +55,8 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         out = self.input(x)
         for layer in self.hidden:
-            # out = torch.tanh(layer(out))
-            out = layer(out)
+            out = torch.tanh(layer(out))
+            # out = layer(out)
         out = self.output(out)
         return out
 
@@ -99,17 +99,17 @@ for epoch in range(num_epochs):
             grads_list.append(param.grad)
             
         optimizer.step()
-grads_list = grads_list[1::2]
-print ("Len of grads_list = ", len(grads_list))
+
 # print (grads_gradient)  
 # print ("len of grads = ",len(grads_gradient))
 # for param in model.parameters():
 #             print (param.data)
         
-#         if (i+1) % 100 == 0:
-#             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-#                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
-
+        if (i+1) % 100 == 0:
+            print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+grads_list = grads_list[1::2]
+print ("Len of grads_list = ", len(grads_list))
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
@@ -172,7 +172,7 @@ plt.plot(x_axis,mean_list,label='mean')
 plt.plot(x_axis,var_list,label='variance')
 plt.legend(loc='upper left')
 plt.yscale('log')
-plt.savefig('100_depth_weight_mean_variance_with_xavier_linear_activation')
+plt.savefig(('./graph/{}_depth_with_xavier_linear_activation').format(depth))
 
 
 

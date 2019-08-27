@@ -23,7 +23,7 @@ STEP 2: MAKING DATASET ITERABLE
 
 batch_size = 100
 n_iters = 3000
-hidden_layer_num = 10
+hidden_layer_num = 100
 num_epochs = n_iters / (len(train_dataset) / batch_size)
 num_epochs = int(num_epochs)
 
