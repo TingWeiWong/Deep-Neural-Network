@@ -1,16 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-N, M = 1000, 500
-Q = N / M
-W = np.random.normal(0,1,size=(M,N))
-# X shape is M x M
-X = (1/N)*np.dot(W.T,W)
-evals = np.linalg.eigvals(X)
-plt.hist(evals, bins=100,density=True)
+# N, M = 1000, 500
+# Q = N / M
+# W = np.random.normal(0,1,size=(M,N))
+# # X shape is M x M
+# X = (1/N)*np.dot(W.T,W)
+# evals = np.linalg.eigvals(X)
+# plt.hist(evals, bins=100,density=True)
+# plt.show()
 
 
-"""
 n = 2
 reps = 10000
 
@@ -25,4 +25,3 @@ plt.legend(loc='upper left')
 plt.title("Eigenvalue distribution")
 plt.show()
 
-"""
