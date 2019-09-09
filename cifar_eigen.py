@@ -188,7 +188,7 @@ plt.plot(x_axis,mean_list,label='mean')
 plt.plot(x_axis,var_list,label='variance')
 plt.legend(loc='upper left')
 plt.yscale('log')
-plt.savefig('CIFAR10_%d_depth_weight_mean_variance_with_xavier_linear_activation' % depth)
+plt.savefig('./graph/CIFAR10_%d_depth_weight_mean_variance_with_xavier_linear_activation' % depth)
 
 
 
