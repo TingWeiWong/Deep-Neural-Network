@@ -8,7 +8,7 @@ import sys
 import inspect
 
 # Parameters
-CTX = mx.gpu(3)
+CTX = mx.gpu(0)
 
 NUM_LAYER = 500
 NUM_UNITS = 500
@@ -127,8 +127,8 @@ mnist = mx.test_utils.get_mnist()
 train_data = mx.gluon.data.vision.MNIST(train=True).transform_first(data_xform)
 val_data = mx.gluon.data.vision.MNIST(train=False).transform_first(data_xform)
 train_loader = mx.gluon.data.DataLoader(train_data, shuffle=True, batch_size=100)
-val_loader = mx.gluon.data.DataLoader(val_data, shuffle=False, batch_size=100)
-all_loader = mx.gluon.data.DataLoader(val_data, shuffle=False, batch_size=50000)
+val_loader = mx.gluon.data.DataLoader(val_data, shuffle=False, batch_size=60)
+all_loader = mx.gluon.data.DataLoader(val_data, shuffle=False, batch_size=30000)
 
 metric = mx.metric.create([mx.metric.Accuracy(), mx.metric.CrossEntropy()])
 loss_function = gluon.loss.SoftmaxCrossEntropyLoss()
