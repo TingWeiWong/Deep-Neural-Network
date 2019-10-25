@@ -52,7 +52,7 @@ class Householder(mx.gluon.HybridBlock):
         super(Householder, self).__init__(**kwargs)
         with self.name_scope():
             self.N = N
-            self.num_v = 30
+            self.num_v = 5
             self.v_concat = self.params.get('v_concat',
                 shape=(N, self.num_v), init=mx.initializer.Normal(), dtype=dtype)
             if use_bias:
