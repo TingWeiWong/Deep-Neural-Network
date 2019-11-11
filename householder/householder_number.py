@@ -10,8 +10,8 @@ of I_n, we want to see if H = H1*H2*H3...Hn if n has any impact on H
 
 
 # Global parameters
-householder_number = 50
-dimension = 5
+householder_number = 70
+dimension = 10
 
 def gauss_rand_vector(dims):
 	vec = [gauss(0, 1) for i in range(dims)]
@@ -33,7 +33,8 @@ def CreateHouseholder(dimension):
 	# householder_transpose = np.transpose(householder)
 	# return householder,householder_transpose
 	return householder
-# print ("householder = ",householder(3))
+householder_matrix = CreateHouseholder(3)
+print ("householder = ",np.matmul(householder_matrix,np.transpose(householder_matrix)))
 
 def construct_householder_list(householder_number, dimension):
 	householder_list = []
@@ -75,24 +76,35 @@ def calculate_distance_product(householder_number,dimension):
 		dist_list.append(dist)
 	return dist_list
 
+error_list = np.zeros((100,))
 
-householder_list = construct_householder_list(householder_number,dimension)
+for h in range(100):
+	H = np.eye(100)
+	for _ in range(h):
+		v = np.random.normal(size=(100, 1))
+		H = H@(np.eye(100) - 2*v@v.T/(v.T@v))
+	d = np.eye(100) - H@H.T
+	error_list[h] = np.linalg.norm(d)
 
-product_list = get_householder_product_list(householder_number,dimension)
-
-print ("Last of product_list = ",product_list[-10])
-
-eval_list = eval_householder_list(householder_number,dimension) 
-
-dist_list = calculate_distance_product(householder_number,dimension)
-
-print ("dist_list = ",dist_list)
-
-x_axis = list(range(householder_number))
-plt.plot(x_axis,dist_list,label="error")
-plt.legend(loc='upper left')
-plt.yscale('log')
+plt.plot(error_list)
 plt.show()
+# householder_list = construct_householder_list(householder_number,dimension)
+
+# product_list = get_householder_product_list(householder_number,dimension)
+
+# print ("Last of product_list = ",product_list)
+
+# # eval_list = eval_householder_list(householder_number,dimension) 
+
+# dist_list = calculate_distance_product(householder_number,dimension)
+
+# print ("dist_list = ",dist_list)
+
+# x_axis = list(range(householder_number))
+# plt.plot(x_axis,dist_list,label="error")
+# plt.legend(loc='upper left')
+# plt.yscale('log')
+# plt.show()
 
 # householder = CreateHouseholder(4)
 # evals = np.linalg.eigvals(householder)
