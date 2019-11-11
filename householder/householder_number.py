@@ -24,18 +24,58 @@ def gauss_rand_vector(dims):
 def CreateHouseholder(dimension):
 	Identity = np.eye(dimension,dimension)
 	householder = Identity - 2 * gauss_rand_vector(dimension)
-	householder_transpose = np.transpose(householder)
-	return householder,householder_transpose
-
+	# householder_transpose = np.transpose(householder)
+	# return householder,householder_transpose
+	return householder
 # print ("householder = ",householder(3))
 
-householder, householder_transpose = CreateHouseholder(4)
+def construct_householder_list(householder_number, dimension):
+	householder_list = []
+	for i in range(householder_number):
+		householder_list.append(CreateHouseholder(dimension))
+	for i in range(householder_number):
+		I = np.eye(dimension,dimension)
+		for j in range(i+1):
+			I = np.matmul(I,householder_list[j])
+		householder_list[i] = I
+
+	return householder_list
+
+
+householder_list = []
+
+for i in range(5):
+	householder_list.append(CreateHouseholder(4))
+
+print ("Householder list = ",householder_list)
+
+for i in range(5):
+	result = np.eye(4,4)
+	for j in range(i+1):
+		result = np.matmul(result,householder_list[j])
+	householder_list[i] = result
+print ("modified householder_list = ",householder_list)
+
+product_list = []
+
+for matrix in householder_list:
+	product_list.append(np.matmul(matrix,np.transpose(matrix)))
+
+print ("product_list = ",product_list)
+for matrix in householder_list:
+	print ("eval = ",np.linalg.eigvals(matrix))
+
+
+
+
+
+householder = CreateHouseholder(4)
 evals = np.linalg.eigvals(householder)
 print ("Evals = ",evals)
-plt.hist(evals, bins='auto',density=True)
-plt.show()
-result = np.matmul(householder,householder_transpose)
-print ("Householder product = ",result)
+s = plt.hist(evals, bins='auto',density=True)
+# plt.show()
+# result = np.matmul(householder,householder_transpose)
+# print ("Householder product = ",result)
 
 
 
