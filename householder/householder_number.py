@@ -41,20 +41,16 @@ def construct_householder_list(householder_number, dimension):
 
 	return householder_list
 
+def get_householder_product_list(householder_number,dimension):
+	product_list = []
+	householder_list = construct_householder_list(householder_number,dimension)
 
-householder_list = []
+	for householder in householder_list:
+		product_list.append(np.matmul(matrix,np.transpose(matrix)))
+	return product_list
 
-for i in range(5):
-	householder_list.append(CreateHouseholder(4))
 
-print ("Householder list = ",householder_list)
-
-for i in range(5):
-	result = np.eye(4,4)
-	for j in range(i+1):
-		result = np.matmul(result,householder_list[j])
-	householder_list[i] = result
-print ("modified householder_list = ",householder_list)
+householder_list = construct_householder_list(7,4)
 
 product_list = []
 
