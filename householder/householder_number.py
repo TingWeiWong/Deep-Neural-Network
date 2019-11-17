@@ -76,13 +76,20 @@ def calculate_distance_product(householder_number,dimension):
 		dist_list.append(dist)
 	return dist_list
 
-error_list = np.zeros((100,))
 
-for h in range(100):
+# Normalization is what makes householder product explode
+v_number = 100
+
+
+error_list = np.zeros((v_number,))
+
+for h in range(v_number):
 	H = np.eye(100)
 	for _ in range(h):
 		v = np.random.normal(size=(100, 1))
-		H = H@(np.eye(100) - 2*v@v.T/(v.T@v))
+		# H = H@(np.eye(100) - 2*v@v.T/(v.T@v))
+		H = H@(np.eye(100) - 2*v@v.T)
+		# H = np.matmul(H, np.eye(100) - 2*v@v.T/(v.T@v))
 	d = np.eye(100) - H@H.T
 	error_list[h] = np.linalg.norm(d)
 
