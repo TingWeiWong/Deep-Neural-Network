@@ -10,8 +10,15 @@ of I_n, we want to see if H = H1*H2*H3...Hn if n has any impact on H
 
 
 # Global parameters
-householder_number = 70
-dimension = 10
+householder_number = 100
+dimension = 100
+
+def gaussian_random_vector(dimension):
+	vec = [gauss(0, 1) for i in range(dimension)]
+	mag = sum(x**2 for x in vec) ** .5
+	# print ("Mag = ",mag)
+	unit_vector =  np.transpose([x/mag for x in vec])
+	return unit_vector	
 
 def gauss_rand_vector(dims):
 	vec = [gauss(0, 1) for i in range(dims)]
@@ -22,6 +29,8 @@ def gauss_rand_vector(dims):
 	dot_product = unit_vector.dot(unit_vector_transpose)
 	# outer_product = unit_vector_transpose * unit_vector
 	outer_product = np.outer(unit_vector_transpose,unit_vector)
+	print ("Dot product = ",dot_product)
+	outer_product = outer_product / dot_product
 	# print("outer_product = ",outer_product)
 	# print ("Dot product = ",dot_product)
 	# print ("unit_vector_transpose = ",unit_vector_transpose)
@@ -77,24 +86,40 @@ def calculate_distance_product(householder_number,dimension):
 	return dist_list
 
 
+def householder_with_vector_normalization(v_number, dimension):
+	error_list = np.zeros((v_number,))
+
+	for h in range(v_number):
+		H = np.eye(dimension)
+		for _ in range(h):
+			v = np.random.normal(size=(dimension, 1))
+			H = np.matmul(H, np.eye(dimension) - 2*v@v.T/(v.T@v))
+		distance = np.eye(dimension) - np.matmul(H,H.T)
+		error_list[h] = np.linalg.norm(distance)
+
+	plt.plot(error_list)
+	plt.show()	
+	return error_list
+
+error_list = householder_with_vector_normalization(100,100)
 # Normalization is what makes householder product explode
-v_number = 100
+# v_number = dimension
 
 
-error_list = np.zeros((v_number,))
+# error_list = np.zeros((v_number,))
 
-for h in range(v_number):
-	H = np.eye(100)
-	for _ in range(h):
-		v = np.random.normal(size=(100, 1))
-		# H = H@(np.eye(100) - 2*v@v.T/(v.T@v))
-		H = H@(np.eye(100) - 2*v@v.T)
-		# H = np.matmul(H, np.eye(100) - 2*v@v.T/(v.T@v))
-	d = np.eye(100) - H@H.T
-	error_list[h] = np.linalg.norm(d)
+# for h in range(v_number):
+# 	H = np.eye(100)
+# 	for _ in range(h):
+# 		v = np.random.normal(size=(100, 1))
+# 		# H = H@(np.eye(100) - 2*v@v.T/(v.T@v))
+# 		H = H@(np.eye(100) - 2*v@v.T)
+# 		# H = np.matmul(H, np.eye(100) - 2*v@v.T/(v.T@v))
+# 	d = np.eye(100) - H@H.T
+# 	error_list[h] = np.linalg.norm(d)
 
-plt.plot(error_list)
-plt.show()
+# plt.plot(error_list)
+# plt.show()
 # householder_list = construct_householder_list(householder_number,dimension)
 
 # product_list = get_householder_product_list(householder_number,dimension)
@@ -103,7 +128,7 @@ plt.show()
 
 # # eval_list = eval_householder_list(householder_number,dimension) 
 
-# dist_list = calculate_distance_product(householder_number,dimension)
+dist_list = calculate_distance_product(householder_number,dimension)
 
 # print ("dist_list = ",dist_list)
 
