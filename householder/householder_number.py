@@ -29,7 +29,7 @@ def gauss_rand_vector(dims):
 	dot_product = unit_vector.dot(unit_vector_transpose)
 	# outer_product = unit_vector_transpose * unit_vector
 	outer_product = np.outer(unit_vector_transpose,unit_vector)
-	print ("Dot product = ",dot_product)
+	# print ("Dot product = ",dot_product)
 	outer_product = outer_product / dot_product
 	# print("outer_product = ",outer_product)
 	# print ("Dot product = ",dot_product)
@@ -91,7 +91,7 @@ def householder_with_vector_normalization(v_number, dimension):
 
 	for h in range(v_number):
 		H = np.eye(dimension)
-		for _ in range(h):
+		for i in range(h):
 			v = np.random.normal(size=(dimension, 1))
 			H = np.matmul(H, np.eye(dimension) - 2*v@v.T/(v.T@v))
 		distance = np.eye(dimension) - np.matmul(H,H.T)
@@ -128,7 +128,7 @@ error_list = householder_with_vector_normalization(100,100)
 
 # # eval_list = eval_householder_list(householder_number,dimension) 
 
-dist_list = calculate_distance_product(householder_number,dimension)
+# dist_list = calculate_distance_product(householder_number,dimension)
 
 # print ("dist_list = ",dist_list)
 
