@@ -24,7 +24,7 @@ input_correlation = x.dot(x.T)
 
 input_output_correlation = y.dot(x.T)
 
-learning_rate = 1e-6
+learning_rate = 1e-7
 
 p_difference_list = []
 
