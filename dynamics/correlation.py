@@ -24,7 +24,7 @@ input_correlation = x.dot(x.T)
 
 input_output_correlation = y.dot(x.T)
 
-learning_rate = 1e-5
+learning_rate = 1e-6
 
 p_difference_list = []
 
@@ -88,8 +88,8 @@ plt.plot(x_axis,p_difference_list,label='p_difference')
 # plt.yscale('log')
 # plt.savefig('100_depth_weight_mean_without_xavier_linear_activation')
 plt.legend(loc='upper left')
-# plt.yscale('log')
-plt.savefig('learning_rate_%d_learning_dynamics_difference' % learning_rate)
+plt.yscale('log')
+plt.savefig('learning_rate_%s_learning_dynamics_difference' % learning_rate)
 
 
 
