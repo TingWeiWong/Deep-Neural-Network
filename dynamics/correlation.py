@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
@@ -23,7 +24,10 @@ input_correlation = x.dot(x.T)
 
 input_output_correlation = y.dot(x.T)
 
-learning_rate = 1e-8
+learning_rate = 1e-5
+
+p_difference_list = []
+
 for t in range(500):
     # Forward pass: compute predicted y
     h = w1.dot(x)
@@ -50,7 +54,9 @@ for t in range(500):
     # P2 = grad_w2.dot(np.linalg.inv(w2_right))
     p1 = grad_w1[1][1] / w1_right[1][1] / 2
     p2 = grad_w2[1][1] / w2_right[1][1] / 2
-    print ("P difference = ",np.linalg.norm(p1) - np.linalg.norm(p2))
+    p_difference = np.linalg.norm(p1) - np.linalg.norm(p2)
+    print ("P difference = ",p_difference)
+    p_difference_list.append(p_difference)
     # ratio = P * learning_rate 
     # print ("ratio = ",ratio)
     P1 = np.divide(grad_w1,w1_right)
@@ -71,3 +77,27 @@ for t in range(500):
     # Update weights
     w1 -= learning_rate * grad_w1
     w2 -= learning_rate * grad_w2
+
+
+
+
+
+
+x_axis = list(range(500))
+plt.plot(x_axis,p_difference_list,label='p_difference')
+# plt.yscale('log')
+# plt.savefig('100_depth_weight_mean_without_xavier_linear_activation')
+plt.legend(loc='upper left')
+# plt.yscale('log')
+plt.savefig('learning_rate_%d_learning_dynamics_difference' % learning_rate)
+
+
+
+
+
+
+
+
+
+
+
