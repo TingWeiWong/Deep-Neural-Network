@@ -9,8 +9,8 @@ N, D_in, H, D_out = 64, 1000, 100, 10
 y_size, x_size, mid_dim = 100, 100, 1000
 
 # Create random input and output data
-x = np.random.randn(x_size, 1)
-y = np.random.randn(y_size, 1)
+x = np.random.randn(x_size, 20)
+y = np.random.randn(y_size, 20)
 
 # Randomly initialize weights
 w1 = np.random.randn(mid_dim, x_size)
@@ -23,7 +23,7 @@ input_correlation = x.dot(x.T)
 
 input_output_correlation = y.dot(x.T)
 
-learning_rate = 1e-5
+learning_rate = 1e-8
 for t in range(500):
     # Forward pass: compute predicted y
     h = w1.dot(x)
