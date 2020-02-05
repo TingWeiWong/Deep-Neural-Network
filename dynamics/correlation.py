@@ -10,8 +10,8 @@ N, D_in, H, D_out = 64, 1000, 100, 10
 y_size, x_size, mid_dim = 100, 100, 1000
 
 # Create random input and output data
-x = np.random.randn(x_size, 20)
-y = np.random.randn(y_size, 20)
+x = np.random.randn(x_size, 1)
+y = np.random.randn(y_size, 1)
 
 # Randomly initialize weights
 w1 = np.random.randn(mid_dim, x_size)
@@ -36,7 +36,7 @@ for t in range(500):
 
     # Compute and print loss
     loss = np.square(y_pred - y).sum()
-    print(t, loss)
+    print(t, "loss = ",loss)
 
     # Backprop to compute gradients of w1 and w2 with respect to loss
     grad_y_pred = 2.0 * (y_pred - y)
@@ -54,6 +54,8 @@ for t in range(500):
     # P2 = grad_w2.dot(np.linalg.inv(w2_right))
     p1 = grad_w1[1][1] / w1_right[1][1] / 2
     p2 = grad_w2[1][1] / w2_right[1][1] / 2
+    print ("P1 value = ",p1)
+    print ("P2 value = ",p2)
     p_difference = np.linalg.norm(p1) - np.linalg.norm(p2)
     print ("P difference = ",p_difference)
     p_difference_list.append(p_difference)
@@ -89,6 +91,7 @@ plt.plot(x_axis,p_difference_list,label='p_difference')
 # plt.savefig('100_depth_weight_mean_without_xavier_linear_activation')
 plt.legend(loc='upper left')
 plt.yscale('log')
+# plt.show()
 plt.savefig('learning_rate_%s_learning_dynamics_difference' % learning_rate)
 
 
