@@ -92,7 +92,7 @@ plt.plot(x_axis,p_difference_list,label='p_difference')
 plt.legend(loc='upper left')
 plt.yscale('log')
 # plt.show()
-plt.savefig('learning_rate_%s_learning_dynamics_difference' % learning_rate)
+plt.savefig('./graph/learning_rate_%s_learning_dynamics_difference' % learning_rate)
 
 
 
