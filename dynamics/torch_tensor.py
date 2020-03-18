@@ -70,22 +70,7 @@ for t in range(epoch):
 	print ("P difference = ",p_difference)
 	p_difference_list.append(p_difference)
 	loss_list.append(loss)
-	# ratio = P * learning_rate 
-	# print ("ratio = ",ratio)
-	# P1 = np.divide(grad_w1,w1_right)
-	# P2 = np.divide(grad_w2,w2_right)
-
-	# p1_norm = np.linalg.norm(P1)
-	# p2_norm = np.linalg.norm(P2)
-
-	# difference = p1_norm - p2_norm 
-
-	# print ("difference = ",difference)
-
-	# print ("P1, P2 = ",P1,P2)
 	
-
-
 
 	# Update weights
 	w1 -= learning_rate * grad_w1
