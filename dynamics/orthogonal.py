@@ -17,8 +17,17 @@ x = torch.randn(x_size, 50, device=device, dtype=dtype)
 y = torch.randn(y_size, 50, device=device, dtype=dtype)
 
 # Randomly initialize weights
-w1 = torch.randn(mid_dim, mid_dim, device=device, dtype=dtype, requires_grad=True)
-w2 = torch.randn(mid_dim, mid_dim, device=device, dtype=dtype, requires_grad=True)
+# w1 = torch.randn(mid_dim, mid_dim, device=device, dtype=dtype, requires_grad=True)
+# w2 = torch.randn(mid_dim, mid_dim, device=device, dtype=dtype, requires_grad=True)
+
+# w1, _ = w1.qr()
+# w2, _ = w2.qr()
+w1 = torch.empty(mid_dim,mid_dim, device=device, dtype=dtype, requires_grad=True)
+w2 = torch.empty(mid_dim,mid_dim, device=device, dtype=dtype,requires_grad=True)
+
+torch.nn.init.orthogonal_(w1, gain=1)
+torch.nn.init.orthogonal_(w2, gain=1)
+
 
 init_equivalent_weight = w2.mm(w1)
 
@@ -33,6 +42,9 @@ print ("Max, min singular = ", max_singular, min_singular)
 print ("Max allowed learning rate = ",max_allowed_learning_rate)
 
 learning_rate = 1e-5
+
+# w1 = torch.randn(mid_dim, x_size, device=device, dtype=dtype, requires_grad=True)
+# w2 = torch.randn(y_size, mid_dim, device=device, dtype=dtype, requires_grad=True)
 
 loss_list = []
 p_difference_list = []
@@ -57,6 +69,7 @@ for t in range(epoch):
 	_ , S, _ = torch.svd(equivalent_weight, False, False)
 
 	condition_number = S[0] / S[-1]
+	condition_number_list.append(condition_number)
 
 	# print ("condition_number = ",condition_number)
 

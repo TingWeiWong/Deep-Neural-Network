@@ -30,7 +30,7 @@ input_correlation = x.mm(x.t())
 
 input_output_correlation = y.mm(x.t())
 
-learning_rate = 1e-8
+learning_rate = 1e-5
 
 loss_list = []
 p_difference_list = []
@@ -62,13 +62,13 @@ for t in range(epoch):
 
 	# P1 = grad_w1.mm(np.linalg.inv(w1_right))
 	# P2 = grad_w2.mm(np.linalg.inv(w2_right))
-	p1 = grad_w1[1][1] / w1_right[1][1] / 2
-	p2 = grad_w2[1][1] / w2_right[1][1] / 2
+	# p1 = grad_w1[1][1] / w1_right[1][1] / 2
+	# p2 = grad_w2[1][1] / w2_right[1][1] / 2
 	# print ("P1 value = ",p1)
 	# print ("P2 value = ",p2)
-	p_difference = p1.norm() - p2.norm()
-	print ("P difference = ",p_difference)
-	p_difference_list.append(p_difference)
+	# p_difference = p1.norm() - p2.norm()
+	# print ("P difference = ",p_difference)
+	# p_difference_list.append(p_difference)
 	loss_list.append(loss)
 	
 
