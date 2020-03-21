@@ -41,7 +41,7 @@ print ("Max, min singular = ", max_singular, min_singular)
 
 print ("Max allowed learning rate = ",max_allowed_learning_rate)
 
-learning_rate = 1e-5
+learning_rate = 5e-5
 
 # w1 = torch.randn(mid_dim, x_size, device=device, dtype=dtype, requires_grad=True)
 # w2 = torch.randn(y_size, mid_dim, device=device, dtype=dtype, requires_grad=True)
@@ -96,8 +96,17 @@ for t in range(epoch):
 	# tensor, but doesn't track history.
 	# You can also use torch.optim.SGD to achieve this.
 	with torch.no_grad():
-		w1 -= learning_rate * w1.grad
-		w2 -= learning_rate * w2.grad
+		w1_update = learning_rate * w1.grad
+		w1_update_scale = torch.norm(w1_update)
+		w2_update = learning_rate * w2.grad
+		w2_update_scale = torch.norm(w2_update)
+		w1_scale, w2_scale = torch.norm(w1), torch.norm(w2)
+
+		if t % 100 == 99:
+			print ("W1 ratio = ",w1_update_scale / w1_scale)
+			print ("W2 ratio = ",w2_update_scale / w1_scale)
+		w1 -= w1_update
+		w2 -= w2_update
 
 		# Manually zero the gradients after updating weights
 		w1.grad.zero_()
