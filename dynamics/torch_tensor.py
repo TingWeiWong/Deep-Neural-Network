@@ -103,6 +103,9 @@ for learning_rate in learning_rate_list:
 	plt.yscale('log')
 	# plt.show()
 	plt.savefig('./graph/learning_rate_%s_constant' % learning_rate)
+
+	plt.close()
+	
 	# plt.savefig()
 
 
