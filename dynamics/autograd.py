@@ -15,10 +15,10 @@ y_size, x_size, mid_dim = 100, 100, 100
 
 learning_rate_list = [1e-5, 5e-6, 1e-6, 5e-7, 1e-7, 5e-8, 1e-8]
 
-epoch = int(3)
+epoch = int(5E3)
 x_axis = list(range(epoch))
 
-loss_dict, condition_number_dict, max_allowed_learning_rate_dict = {}, {}, {}
+loss_dict, condition_number_dict, max_allowed_learning_rate_dict, equivalent_weight_dict = {}, {}, {}, {}
 
 for learning_rate in learning_rate_list:
 	# Create random input and output data
@@ -49,6 +49,7 @@ for learning_rate in learning_rate_list:
 	# learning_rate = 1.8e-5
 
 	loss_list = []
+	equivalent_weight_list = []
 	max_allowed_learning_rate_list = []
 	condition_number_list = []
 
@@ -67,18 +68,20 @@ for learning_rate in learning_rate_list:
 
 		equivalent_weight = (w2).mm(w1)
 
-		weight_squared = equivalent_weight.t().mm(equivalent_weight)
+		equivalent_weight_list.append(equivalent_weight)
 
-		_ , S, _ = torch.svd(equivalent_weight, False, False)
+		# weight_squared = equivalent_weight.t().mm(equivalent_weight)
 
-		_ , S_squared, _ = torch.svd(weight_squared, False, False)
+		# _ , S, _ = torch.svd(equivalent_weight, False, False)
 
-		max_allowed_learning_rate = 1 / S_squared[0]
+		# _ , S_squared, _ = torch.svd(weight_squared, False, False)
 
-		condition_number = S[0] / S[-1]
+		# max_allowed_learning_rate = 1 / S_squared[0]
+
+		# condition_number = S[0] / S[-1]
 		
-		condition_number_list.append(condition_number)
-		max_allowed_learning_rate_list.append(max_allowed_learning_rate)
+		# condition_number_list.append(condition_number)
+		# max_allowed_learning_rate_list.append(max_allowed_learning_rate)
 
 		# print ("condition_number = ",condition_number)
 
@@ -109,10 +112,10 @@ for learning_rate in learning_rate_list:
 		# You can also use torch.optim.SGD to achieve this.
 		with torch.no_grad():
 			w1_update = learning_rate * w1.grad
-			w1_update_scale = torch.norm(w1_update)
+			# w1_update_scale = torch.norm(w1_update)
 			w2_update = learning_rate * w2.grad
-			w2_update_scale = torch.norm(w2_update)
-			w1_scale, w2_scale = torch.norm(w1), torch.norm(w2)
+			# w2_update_scale = torch.norm(w2_update)
+			# w1_scale, w2_scale = torch.norm(w1), torch.norm(w2)
 			# if t % 100 == 99:
 			# 	print ("W1 ratio = ",w1_update_scale / w1_scale)
 			# 	print ("W2 ratio = ",w2_update_scale / w1_scale)
@@ -124,8 +127,8 @@ for learning_rate in learning_rate_list:
 			w2.grad.zero_()
 
 	loss_dict[learning_rate] = loss_list
-	condition_number_dict[learning_rate] = condition_number_list
-	max_allowed_learning_rate_dict[learning_rate] = max_allowed_learning_rate_list
+	# condition_number_dict[learning_rate] = condition_number_list
+	# max_allowed_learning_rate_dict[learning_rate] = max_allowed_learning_rate_list
 
 
 	# plt.plot(x_axis,loss_list, label='loss')
@@ -158,20 +161,20 @@ plt.yscale('log')
 plt.savefig('./graph/autograd_loss')
 plt.close()
 
-for key in condition_number_dict:
-	plt.plot(x_axis,condition_number_dict[key], label=str(key))
+# for key in condition_number_dict:
+# 	plt.plot(x_axis,condition_number_dict[key], label=str(key))
 
-plt.legend(loc='upper left')
-plt.yscale('log')
-plt.savefig('./graph/autograd_condition_number')
-plt.close()
+# plt.legend(loc='upper left')
+# plt.yscale('log')
+# plt.savefig('./graph/autograd_condition_number')
+# plt.close()
 
-for key in max_allowed_learning_rate_dict:
-	plt.plot(x_axis,max_allowed_learning_rate_dict[key], label=str(key))
+# for key in max_allowed_learning_rate_dict:
+# 	plt.plot(x_axis,max_allowed_learning_rate_dict[key], label=str(key))
 
-plt.legend(loc='upper left')
-plt.yscale('log')
-plt.savefig('./graph/autograd_max_learningRate')
-plt.close()
+# plt.legend(loc='upper left')
+# plt.yscale('log')
+# plt.savefig('./graph/autograd_max_learningRate')
+# plt.close()
 
 
