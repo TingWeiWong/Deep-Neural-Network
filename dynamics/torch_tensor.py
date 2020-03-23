@@ -18,7 +18,7 @@ y_size, x_size, mid_dim = 100, 100, 1000
 
 epoch = int(5)
 
-learning_rate_list = [1e-5, 1e-6, 1e-7, 1e-8]
+learning_rate_list = [1e-5, 5e-6, 1e-6, 5e-7, 1e-7, 5e-8, 1e-8]
 
 for learning_rate in learning_rate_list:
 
@@ -105,7 +105,7 @@ for learning_rate in learning_rate_list:
 	plt.savefig('./graph/learning_rate_%s_constant' % learning_rate)
 
 	plt.close()
-	
+
 	# plt.savefig()
 
 
