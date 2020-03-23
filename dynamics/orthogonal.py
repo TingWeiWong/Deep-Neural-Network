@@ -29,19 +29,24 @@ torch.nn.init.orthogonal_(w1, gain=1)
 torch.nn.init.orthogonal_(w2, gain=1)
 
 
-init_equivalent_weight = w2.mm(w1)
+init_equivalent_weight = (w2).mm(w1)
+
+init_weight_squared = init_equivalent_weight.t().mm(init_equivalent_weight)
 
 _ , S_i, _ = torch.svd(init_equivalent_weight, False, False)
 
+_ , S_squared, _ = torch.svd(init_weight_squared, False, False)
+
+
 max_singular, min_singular = S_i[0], S_i[-1]
 
-max_allowed_learning_rate = 1 / max_singular
+max_allowed_learning_rate = 1 / S_squared[0]
 
 print ("Max, min singular = ", max_singular, min_singular)
 
 print ("Max allowed learning rate = ",max_allowed_learning_rate)
 
-learning_rate = 5e-5
+learning_rate = 1.8e-5
 
 # w1 = torch.randn(mid_dim, x_size, device=device, dtype=dtype, requires_grad=True)
 # w2 = torch.randn(y_size, mid_dim, device=device, dtype=dtype, requires_grad=True)
@@ -64,11 +69,17 @@ for t in range(epoch):
 	y_pred = w2.mm(w1).mm(x)
 
 
-	equivalent_weight = w2.mm(w1)
+	equivalent_weight = (w2).mm(w1)
+
+	weight_squared = equivalent_weight.t().mm(equivalent_weight)
+
 
 	_ , S, _ = torch.svd(equivalent_weight, False, False)
 
+	_ , S_squared, _ = torch.svd(weight_squared, False, False)
+
 	condition_number = S[0] / S[-1]
+
 	condition_number_list.append(condition_number)
 
 	# print ("condition_number = ",condition_number)
@@ -81,6 +92,8 @@ for t in range(epoch):
 	if t % 100 == 99:
 		print(t, "loss = ",loss)
 		print ("Condition number = ",condition_number)
+		max_allowed_learning_rate = 1 / S_squared[0]
+		print ("Max allowed learning rate = ",max_allowed_learning_rate)
 
 	# Use autograd to compute the backward pass. This call will compute the
 	# gradient of loss with respect to all Tensors with requires_grad=True.
@@ -102,9 +115,9 @@ for t in range(epoch):
 		w2_update_scale = torch.norm(w2_update)
 		w1_scale, w2_scale = torch.norm(w1), torch.norm(w2)
 
-		if t % 100 == 99:
-			print ("W1 ratio = ",w1_update_scale / w1_scale)
-			print ("W2 ratio = ",w2_update_scale / w1_scale)
+		# if t % 100 == 99:
+		# 	print ("W1 ratio = ",w1_update_scale / w1_scale)
+		# 	print ("W2 ratio = ",w2_update_scale / w1_scale)
 		w1 -= w1_update
 		w2 -= w2_update
 
