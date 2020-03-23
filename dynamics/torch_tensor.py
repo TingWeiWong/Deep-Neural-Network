@@ -94,6 +94,8 @@ for learning_rate in learning_rate_list:
 	# plt.show()
 	plt.savefig('./graph/learning_rate_%s_loss' % learning_rate)
 
+	plt.close()
+
 
 	plt.plot(x_axis, constant_list, label='constant')
 
