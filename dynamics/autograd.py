@@ -3,8 +3,8 @@ import torch
 import matplotlib.pyplot as plt
 
 dtype = torch.float
-# device = torch.device("cpu")
-device = torch.device("cuda:0") # Uncomment this to run on GPU
+device = torch.device("cpu")
+#device = torch.device("cuda:0") # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
@@ -108,7 +108,7 @@ for learning_rate in learning_rate_list:
 
 		equivalent_weight = (w2).mm(w1)
 
-		equivalent_weight_list.append(equivalent_weight)
+		equivalent_weight_list.append(equivalent_weight.detach())
 
 		# weight_squared = equivalent_weight.t().mm(equivalent_weight)
 
@@ -130,7 +130,7 @@ for learning_rate in learning_rate_list:
 		# loss.item() gets the scalar value held in the loss.
 		loss = (y_pred - y).pow(2).sum()
 
-		loss_list.append(loss)
+		loss_list.append(loss.detach())
 
 		# if t % 100 == 99:
 		# 	print(t, "loss = ",loss)
