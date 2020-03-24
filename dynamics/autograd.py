@@ -15,10 +15,50 @@ y_size, x_size, mid_dim = 100, 100, 100
 
 learning_rate_list = [1e-5, 5e-6, 1e-6, 5e-7, 1e-7, 5e-8, 1e-8]
 
-epoch = int(5E4)
+epoch = int(5)
 x_axis = list(range(epoch))
 
 loss_dict, condition_number_dict, max_allowed_learning_rate_dict, equivalent_weight_dict = {}, {}, {}, {}
+
+max_singular_dict, min_singular_dict = {}, {}
+
+
+def calculate_condition_and_max_rate(weight_list):
+	"""
+	This function transforms weight list into:
+		1. condition number list 
+		2. max learning_rate list with weight squared
+	"""
+	condition_number_list, max_allowed_learning_rate_list = [], []
+	max_singular_list, min_singular_list = [], []
+
+	for equivalent_weight in weight_list:
+
+		weight_squared = equivalent_weight.t().mm(equivalent_weight)
+
+		_ , S, _ = torch.svd(equivalent_weight, False, False)
+
+		_ , S_squared, _ = torch.svd(weight_squared, False, False)
+
+		max_allowed_learning_rate = 1 / S_squared[0]
+
+		max_singular, min_singular = S[0], S[-1]
+
+		condition_number = max_singular / min_singular
+		
+		condition_number_list.append(condition_number)
+		max_allowed_learning_rate_list.append(max_allowed_learning_rate)
+		max_singular_list.append(max_singular)
+		min_singular_list.append(min_singular)
+
+	return condition_number_list, max_allowed_learning_rate_list, max_singular_list, min_singular_list
+
+
+
+
+
+
+
 
 for learning_rate in learning_rate_list:
 	# Create random input and output data
@@ -127,6 +167,7 @@ for learning_rate in learning_rate_list:
 			w2.grad.zero_()
 
 	loss_dict[learning_rate] = loss_list
+	equivalent_weight_dict[learning_rate] = equivalent_weight_list
 	# condition_number_dict[learning_rate] = condition_number_list
 	# max_allowed_learning_rate_dict[learning_rate] = max_allowed_learning_rate_list
 
@@ -157,9 +198,83 @@ for key in loss_dict:
 	plt.plot(x_axis,loss_dict[key], label=str(key))
 
 plt.legend(loc='upper left')
+
+plt.xlabel('epoch')
+plt.ylabel('Condition number')
+plt.title('The condition number of W2W1 through training')
+
 plt.yscale('log')
-plt.savefig('./graph/autograd_loss')
+plt.savefig('./graph/autograd_loss_%s' % epoch)
 plt.close()
+
+
+
+
+for key in equivalent_weight_dict:
+	condition_number_dict[key], max_allowed_learning_rate_dict[key], max_singular_dict[key], min_singular_dict[key] = calculate_condition_and_max_rate(equivalent_weight_dict[key])
+
+
+
+for key in condition_number_dict:
+	plt.plot(x_axis,condition_number_dict[key], label=str(key))
+
+plt.legend(loc='upper left')
+
+plt.xlabel('epoch')
+plt.ylabel('Condition number')
+plt.title('The condition number of W2W1 through training')
+
+plt.yscale('log')
+plt.savefig('./graph/autograd_condition_number_%s' % epoch)
+plt.close()
+
+
+for key in max_allowed_learning_rate_dict:
+	plt.plot(x_axis,max_allowed_learning_rate_dict[key], label=str(key))
+
+plt.legend(loc='upper left')
+
+plt.xlabel('epoch')
+plt.ylabel('Max allowed learning rate')
+plt.title('The max allowed learning rate through training')
+
+plt.yscale('log')
+plt.savefig('./graph/autograd_max_learning_rate_%s' % epoch)
+plt.close()
+
+
+for key in max_singular_dict:
+	plt.plot(x_axis,max_singular_dict[key], label=str(key))
+
+plt.legend(loc='upper left')
+
+plt.xlabel('epoch')
+plt.ylabel('Max singular value')
+plt.title('The Max singular value of W2W1 through training')
+
+plt.yscale('log')
+plt.savefig('./graph/autograd_max_singular_%s' % epoch)
+plt.close()
+
+
+for key in min_singular_dict:
+	plt.plot(x_axis,min_singular_dict[key], label=str(key))
+
+plt.legend(loc='upper left')
+
+plt.xlabel('epoch')
+plt.ylabel('Min singular value')
+plt.title('The Min singular value of W2W1 through training')
+
+plt.yscale('log')
+plt.savefig('./graph/autograd_min_singular_%s' % epoch)
+plt.close()
+
+
+
+
+
+
 
 # for key in condition_number_dict:
 # 	plt.plot(x_axis,condition_number_dict[key], label=str(key))
