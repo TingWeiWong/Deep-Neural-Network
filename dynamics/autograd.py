@@ -200,8 +200,8 @@ for key in loss_dict:
 plt.legend(loc='upper left')
 
 plt.xlabel('epoch')
-plt.ylabel('Condition number')
-plt.title('The condition number of W2W1 through training')
+plt.ylabel('Loss')
+plt.title('The loss through training')
 
 plt.yscale('log')
 plt.savefig('./graph/autograd_loss_%s' % epoch)
