@@ -15,7 +15,7 @@ y_size, x_size, mid_dim = 100, 100, 100
 
 learning_rate_list = [1e-5, 5e-6, 1e-6, 5e-7, 1e-7, 5e-8, 1e-8]
 
-epoch = int(5)
+epoch = int(5E4)
 x_axis = list(range(epoch))
 
 loss_dict, condition_number_dict, max_allowed_learning_rate_dict, equivalent_weight_dict = {}, {}, {}, {}
